@@ -22,8 +22,8 @@ class FilterCondition(BaseModel):
 
 class QueryRequest(BaseModel):
     question: str
-    selected_columns: list[str] = []
-    filters: list[FilterCondition] = []
+    selected_columns: list[str] | None = None
+    filters: list[FilterCondition] | None = None
 
 
 class CellReference(BaseModel):
@@ -31,9 +31,9 @@ class CellReference(BaseModel):
     column_name: str
 
 class ContextUsed(BaseModel):
-    used_rows: list[int] = []
-    used_columns: list[str] = []
-    used_cells: list[CellReference] = []
+    used_rows: list[int]
+    used_columns: list[str]
+    used_cells: list[CellReference]
 
 class QueryResponse(BaseModel):
     answer: str

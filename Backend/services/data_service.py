@@ -49,6 +49,11 @@ class DataService:
             rows_count=rows_count,
         )
 
+    def get_df(self) -> pd.DataFrame:
+        if self.df is None:
+            raise HTTPException(status_code=400, detail="Error loading data.")
+        return self.df
+
 
     def get_data(self, page: int = 1, page_size: int = 50) -> DataResponse:
         if self.df is None:
