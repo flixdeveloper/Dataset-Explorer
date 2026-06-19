@@ -4,14 +4,13 @@ from pydantic import BaseModel
 
 
 class UploadResponse(BaseModel):
-    status: str
     filename: str
     rows_count: int
-    columns: list[str]
 
 
 class DataResponse(BaseModel):
-    data: list[dict[str, Any]]
+    columns: list[str]
+    data: list[list[Any]]
     total_rows: int
     page: int
 
