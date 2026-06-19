@@ -3,6 +3,7 @@ import io
 import pandas as pd
 from fastapi import HTTPException, UploadFile
 from models.schemas import DataResponse, UploadResponse
+import duckdb
 
 class DataService:
     def __init__(self):
@@ -49,11 +50,6 @@ class DataService:
             rows_count=rows_count,
         )
 
-    def get_df(self) -> pd.DataFrame:
-        if self.df is None:
-            raise HTTPException(status_code=400, detail="Error loading data.")
-        return self.df
-
 
     def get_data(self, page: int = 1, page_size: int = 50) -> DataResponse:
         if self.df is None:
@@ -77,5 +73,24 @@ class DataService:
             page=page,
         )
 
+    def get_llm_context(self) -> str:
+        if self.df is None:
+            raise HTTPException(status_code=400, detail="Error loading data.")
+        
+        total_rows = len(self.df)
+        dtypes_info = self.df.dtypes.astype(str).to_dict()
+        columns = [f"- {col} ({dtype})" for col, dtype in dtypes_info.items()]
+        context = f"Table name: {self.filename}\nTotal rows: {total_rows}\nColumns: \n{'\n'.join(columns)}"
+        return context
+
+    def run_sql_query(self, query: str) -> pd.DataFrame:
+        if self.df is None:
+            raise HTTPException(status_code=400, detail="Error loading data.")
+        try:
+            con = duckdb.connect()
+            con.register("df", self.df)
+            return con.execute(query).df()
+        except duckdb.Error as e:
+            raise HTTPException(status_code=400, detail=f"SQL error: {str(e)}")
 
 data_service = DataService()

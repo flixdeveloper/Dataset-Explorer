@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class UploadResponse(BaseModel):
@@ -12,7 +12,7 @@ class DataResponse(BaseModel):
     columns: list[str]
     data: list[list[Any]]
     total_rows: int
-    page: int
+    page: int = 1
 
 
 class FilterCondition(BaseModel):
@@ -20,21 +20,32 @@ class FilterCondition(BaseModel):
     operator: Literal["==", "!=", ">", ">=", "<", "<="]
     value: Any
 
-class QueryRequest(BaseModel):
-    question: str
-    selected_columns: list[str] | None = None
-    filters: list[FilterCondition] | None = None
+
+# TODO: add columns and filters
+#    columns: list[str] | None = None
+#    filters: list[FilterCondition] | None = None
+
+
+class LLMResponse(BaseModel):
+    sql_query: list[str]
+    response: str
+    context_used: ContextUsed
+    did_finish: bool
+
+
+
 
 
 class CellReference(BaseModel):
     row_index: int
     column_name: str
+    model_config = ConfigDict(frozen=True)
 
 class ContextUsed(BaseModel):
     used_rows: list[int]
     used_columns: list[str]
     used_cells: list[CellReference]
 
-class QueryResponse(BaseModel):
+class QuestionResponse(BaseModel):
     answer: str
     context_used: ContextUsed
