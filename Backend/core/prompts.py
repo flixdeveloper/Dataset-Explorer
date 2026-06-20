@@ -75,14 +75,14 @@ AGENT_PROMPT = """
 
 SUGGESTIONS_PROMPT = """
     <task>
-    You are a senior data analyst. Based ONLY on the table schema provided in <context>, generate exactly 5 data analysis questions that are directly answerable using this table's columns.
-    </task>
+    You are a senior data analyst. Based ONLY on the table schema provided in <context>, generate exactly 5 short data analysis questions that are directly answerable using this table's columns.
 
-    <rules>
-    - Every question MUST reference at least one column name from the schema above
+    RULES:
+    - Each question MUST be a single natural sentence
+    - Each question MUST reference at least one column name from the schema
     - Questions MUST vary in complexity: include at least 1 simple aggregation, 1 trend or distribution question, and 1 comparative or multi-column question
-    - Use the table name from "Table name:" when referring to the table — NEVER use the word "table" generically
-    - Output ONLY the 5 questions as a numbered list, nothing else
-    - No preamble, no explanations, no follow-up text
-    </rules>
+    - Use the table name from "Table name:" when referring to the table
+    - Keep each question concise — one sentence maximum
+    - Output ONLY the 5 questions, one per line, nothing else
+    </task>
 """

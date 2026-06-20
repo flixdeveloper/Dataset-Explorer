@@ -33,7 +33,7 @@ export async function askQuestion(question: string): Promise<QuestionResponse> {
   return handleResponse<QuestionResponse>(res);
 }
 
-export async function fetchSuggestions(): Promise<{ questions: string[] }> {
-  const res = await fetch(`${API_BASE}/suggestions`);
+export async function fetchSuggestions(signal?: AbortSignal): Promise<{ questions: string[] }> {
+  const res = await fetch(`${API_BASE}/suggestions`, { signal });
   return handleResponse<{ questions: string[] }>(res);
 }

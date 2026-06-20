@@ -12,7 +12,7 @@ const SYSTEM_COL = '__sys_agent_row_id__';
 export default function DataView() {
   const navigate = useNavigate();
   const { table, isLoading, loadPage } = useDataset();
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isMock    = !table;
   const columns   = isMock ? MOCK_COLUMNS : table.columns.filter(c => c !== SYSTEM_COL);
@@ -45,7 +45,7 @@ export default function DataView() {
           />
         </div>
 
-        {sidebarOpen && <ChatPanel />}
+        <ChatPanel open={sidebarOpen} />
       </div>
     </div>
   );
