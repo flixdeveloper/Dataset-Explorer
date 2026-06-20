@@ -3,15 +3,20 @@ import { UploadCloud, FileText, Loader2 } from 'lucide-react';
 
 interface UploadZoneProps {
   onUpload: (file: File) => void;
+  onError?: (message: string) => void;
   isLoading?: boolean;
 }
 
-export default function UploadZone({ onUpload, isLoading = false }: UploadZoneProps) {
+export default function UploadZone({ onUpload, onError, isLoading = false }: UploadZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   function handleFile(file: File | undefined) {
-    if (!file || !file.name.endsWith('.csv')) return;
+    if (!file) return;
+    if (!file.name.endsWith('.csv')) {
+      onError?.(`"${file.name}" is not a CSV file. Please upload a .csv file.`);
+      return;
+    }
     onUpload(file);
   }
 

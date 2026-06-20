@@ -1,3 +1,4 @@
+import { toast } from 'sonner';
 import { LayoutGrid, Type, Sparkles } from 'lucide-react';
 
 import UploadZone from '../components/upload/UploadZone';
@@ -5,7 +6,11 @@ import FeatureCard from '../components/layout/FeatureCard';
 import { useDataset } from '../context/DatasetContext';
 
 export default function Home() {
-  const { handleUpload, isLoading, error } = useDataset();
+  const { handleUpload, isLoading } = useDataset();
+
+  function handleError(message: string) {
+    toast.error(message);
+  }
 
   return (
     <main className="flex-1 flex flex-col items-center justify-center p-6 max-w-4xl mx-auto w-full">
@@ -16,11 +21,7 @@ export default function Home() {
         </p>
       </div>
 
-      <UploadZone onUpload={handleUpload} isLoading={isLoading} />
-
-      {error && (
-        <p className="text-sm text-red-500 font-mono mb-4 -mt-12">{error}</p>
-      )}
+      <UploadZone onUpload={handleUpload} onError={handleError} isLoading={isLoading} />
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
         <FeatureCard

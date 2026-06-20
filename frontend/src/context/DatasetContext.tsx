@@ -6,6 +6,7 @@ import {
   type ReactNode,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import { fetchRows, uploadCSV } from '../services/api';
 import type { DataResponse } from '../types';
@@ -28,7 +29,6 @@ export interface TableState {
 interface DatasetContextValue {
   table: TableState | null;
   isLoading: boolean;
-  error: string | null;
   handleUpload: (file: File) => Promise<void>;
   loadPage: (page: number) => Promise<void>;
 }
@@ -42,7 +42,6 @@ export function DatasetProvider({ children }: { children: ReactNode }) {
 
   const [table, setTable] = useState<TableState | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const loadPage = useCallback(async (page: number) => {
     setIsLoading(true);
@@ -56,7 +55,7 @@ export function DatasetProvider({ children }: { children: ReactNode }) {
         page: data.page,
       }));
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load rows');
+      toast.error(err instanceof Error ? err.message : 'Failed to load rows');
     } finally {
       setIsLoading(false);
     }
@@ -65,7 +64,6 @@ export function DatasetProvider({ children }: { children: ReactNode }) {
   const handleUpload = useCallback(
     async (file: File) => {
       setIsLoading(true);
-      setError(null);
       try {
         const upload = await uploadCSV(file);
         const data: DataResponse = await fetchRows(1, PAGE_SIZE);
@@ -78,7 +76,7 @@ export function DatasetProvider({ children }: { children: ReactNode }) {
         });
         navigate('/data');
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'Upload failed');
+        toast.error(err instanceof Error ? err.message : 'Upload failed');
       } finally {
         setIsLoading(false);
       }
@@ -87,7 +85,7 @@ export function DatasetProvider({ children }: { children: ReactNode }) {
   );
 
   return (
-    <DatasetContext.Provider value={{ table, isLoading, error, handleUpload, loadPage }}>
+    <DatasetContext.Provider value={{ table, isLoading, handleUpload, loadPage }}>
       {children}
     </DatasetContext.Provider>
   );
