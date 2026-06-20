@@ -9,8 +9,9 @@ import { useNavigate } from 'react-router-dom';
 
 import { fetchRows, uploadCSV } from '../services/api';
 import type { DataResponse } from '../types';
+import { toRowObjects } from '../utils/data';
 
-// ── Internal types ────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 export const PAGE_SIZE = 50;
 
@@ -20,19 +21,6 @@ export interface TableState {
   rows: Record<string, unknown>[];
   totalRows: number;
   page: number;
-}
-
-export function toRowObjects(
-  columns: string[],
-  data: unknown[][],
-): Record<string, unknown>[] {
-  return data.map((cells, index) => {
-    const row: Record<string, unknown> = { id: index };
-    columns.forEach((col, i) => {
-      row[col] = cells[i] ?? null;
-    });
-    return row;
-  });
 }
 
 // ── Context shape ─────────────────────────────────────────────────────────────

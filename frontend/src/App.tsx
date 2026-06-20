@@ -9,7 +9,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <DatasetProvider>
-        <div className="min-h-screen bg-white text-gray-900 font-sans flex flex-col">
+        <div className="h-screen bg-white text-gray-900 font-sans flex flex-col overflow-hidden">
           <Header />
           <Routes>
             <Route path="/" element={<Home />} />

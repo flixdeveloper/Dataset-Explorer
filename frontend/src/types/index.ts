@@ -1,4 +1,4 @@
-// ── Backend response shapes ──────────────────────────────────────────────────
+// ── Backend response shapes ───────────────────────────────────────────────────
 
 export interface UploadResponse {
   filename: string;
@@ -22,24 +22,10 @@ export interface QuestionResponse {
   context_used: ContextUsed;
 }
 
-// ── App state shapes ─────────────────────────────────────────────────────────
+// ── Chat ──────────────────────────────────────────────────────────────────────
 
 export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   context_used?: ContextUsed;
-}
-
-export interface AppState {
-  hasFile: boolean;
-  datasetHeaders: string[];
-  datasetRows: Record<string, unknown>[];
-  totalRows: number;
-}
-
-export interface ChatState {
-  messages: ChatMessage[];
-  isAnalyzing: boolean;
-  highlightedRows: number[];
-  highlightedColumns: string[];
 }

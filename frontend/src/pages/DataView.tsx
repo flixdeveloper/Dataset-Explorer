@@ -1,52 +1,52 @@
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import DataViewHeader from '../components/layout/DataViewHeader';
 import DataTable from '../components/table/DataTable';
+import ChatPanel from '../components/chat/ChatPanel';
 import { useDataset, PAGE_SIZE } from '../context/DatasetContext';
+import { MOCK_COLUMNS, MOCK_ROWS } from '../data/mockData';
+
+const SYSTEM_COL = '__sys_agent_row_id__';
 
 export default function DataView() {
   const navigate = useNavigate();
   const { table, isLoading, loadPage } = useDataset();
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Redirect to home if no dataset is loaded (e.g. on hard refresh)
-  useEffect(() => {
-    if (!table) navigate('/', { replace: true });
-  }, [table, navigate]);
-
-  if (!table) return null;
+  const isMock    = !table;
+  const columns   = isMock ? MOCK_COLUMNS : table.columns.filter(c => c !== SYSTEM_COL);
+  const rows      = isMock ? MOCK_ROWS    : table.rows;
+  const totalRows = isMock ? MOCK_ROWS.length : table.totalRows;
+  const page      = isMock ? 1               : table.page;
+  const filename  = isMock ? 'sample_orders.csv' : table.filename;
 
   return (
-    <main className="flex-1 flex flex-col p-6 min-h-0">
-      <div className="flex items-center justify-between mb-4">
-        <div>
-          <h2 className="text-lg font-semibold font-mono">{table.filename}</h2>
-          <p className="text-sm text-gray-400 font-mono">
-            {table.totalRows.toLocaleString()} rows · {table.columns.length} columns
-          </p>
+    <div className="flex-1 flex flex-col overflow-hidden">
+      <DataViewHeader
+        filename={filename}
+        totalRows={totalRows}
+        totalColumns={columns.length}
+        sidebarOpen={sidebarOpen}
+        onNewFile={() => navigate('/')}
+        onToggleSidebar={() => setSidebarOpen(v => !v)}
+      />
+
+      <div className="flex flex-1 overflow-hidden">
+        <div className="flex-1 overflow-hidden">
+          <DataTable
+            columns={columns}
+            rows={rows}
+            totalRows={totalRows}
+            page={page}
+            pageSize={PAGE_SIZE}
+            loading={isLoading}
+            onPageChange={isMock ? () => {} : loadPage}
+          />
         </div>
 
-        <button
-          onClick={() => navigate('/')}
-          className="text-sm font-mono text-gray-400 hover:text-gray-700 transition-colors"
-        >
-          ← upload new file
-        </button>
+        {sidebarOpen && <ChatPanel />}
       </div>
-
-      <div
-        className="flex-1 border border-gray-100 rounded-xl overflow-hidden"
-        style={{ height: 600 }}
-      >
-        <DataTable
-          columns={table.columns}
-          rows={table.rows}
-          totalRows={table.totalRows}
-          page={table.page}
-          pageSize={PAGE_SIZE}
-          loading={isLoading}
-          onPageChange={loadPage}
-        />
-      </div>
-    </main>
+    </div>
   );
 }
