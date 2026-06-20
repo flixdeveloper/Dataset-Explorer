@@ -24,16 +24,16 @@ export default function ChatPanel({ onAsk, isLoading = false }: ChatPanelProps) 
   }
 
   return (
-    <aside className="w-80 flex-shrink-0 flex flex-col border-l border-gray-100 bg-white overflow-hidden">
+    <aside className="w-80 flex-shrink-0 flex flex-col border-l border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 overflow-hidden">
       {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-3.5 border-b border-gray-100 flex-shrink-0">
+      <div className="flex items-center gap-2 px-4 py-3.5 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
         <Sparkles className="w-4 h-4 text-blue-500" />
-        <span className="font-semibold text-sm text-gray-900">AI Analysis</span>
+        <span className="font-semibold text-sm text-gray-900 dark:text-gray-100">AI Analysis</span>
       </div>
 
       {/* Suggestion chips */}
       <div className="flex-1 overflow-y-auto px-4 py-4">
-        <p className="text-xs text-gray-400 font-medium uppercase tracking-wider mb-3">
+        <p className="text-xs text-gray-400 dark:text-gray-500 font-medium uppercase tracking-wider mb-3">
           Suggestions
         </p>
         <div className="flex flex-col gap-2">
@@ -41,30 +41,30 @@ export default function ChatPanel({ onAsk, isLoading = false }: ChatPanelProps) 
             <button
               key={s}
               onClick={() => submit(s)}
-              className="group flex items-center justify-between w-full text-left px-3 py-2.5 bg-white border border-gray-100 rounded-lg shadow-sm hover:border-blue-200 hover:shadow-md transition-all"
+              className="group flex items-center justify-between w-full text-left px-3 py-2.5 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-lg shadow-sm hover:border-blue-200 dark:hover:border-blue-700 hover:shadow-md transition-all"
             >
-              <span className="text-sm text-gray-700 leading-snug">{s}</span>
-              <ArrowRight className="w-3.5 h-3.5 text-gray-300 group-hover:text-blue-400 flex-shrink-0 ml-2 transition-colors" />
+              <span className="text-sm text-gray-700 dark:text-gray-300 leading-snug">{s}</span>
+              <ArrowRight className="w-3.5 h-3.5 text-gray-300 dark:text-gray-600 group-hover:text-blue-400 flex-shrink-0 ml-2 transition-colors" />
             </button>
           ))}
         </div>
       </div>
 
       {/* Chat input */}
-      <div className="px-4 py-4 border-t border-gray-100 flex-shrink-0">
-        <div className="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 focus-within:border-blue-300 focus-within:bg-white transition-colors">
+      <div className="px-4 py-4 border-t border-gray-100 dark:border-gray-800 flex-shrink-0">
+        <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-2 focus-within:border-blue-300 dark:focus-within:border-blue-600 focus-within:bg-white dark:focus-within:bg-gray-800 transition-colors">
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit(input)}
             placeholder="Ask a question…"
-            className="flex-1 bg-transparent text-sm text-gray-700 placeholder-gray-400 outline-none"
+            className="flex-1 bg-transparent text-sm text-gray-700 dark:text-gray-300 placeholder-gray-400 dark:placeholder-gray-600 outline-none"
           />
           <button
             onClick={() => submit(input)}
             disabled={!input.trim() || isLoading}
-            className="p-0.5 text-gray-400 hover:text-blue-500 disabled:opacity-30 transition-colors"
+            className="p-0.5 text-gray-400 dark:text-gray-500 hover:text-blue-500 dark:hover:text-blue-400 disabled:opacity-30 transition-colors"
           >
             <Send className="w-4 h-4" />
           </button>

@@ -39,20 +39,20 @@ export default function DataTable({
   const endRow = Math.min(page * pageSize, totalRows);
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full bg-white dark:bg-gray-950">
 
       {/* Scrollable table area */}
       <div className="flex-1 overflow-auto">
         <table className="w-full text-sm border-collapse">
-          <thead className="sticky top-0 z-10 bg-white">
-            <tr className="border-b border-gray-100">
+          <thead className="sticky top-0 z-10">
+            <tr className="border-b border-gray-100 dark:border-gray-800">
               {columns.map((col) => (
                 <th
                   key={col}
                   className={`px-4 py-3 text-left text-xs font-semibold uppercase tracking-wider whitespace-nowrap
                     ${highlightedColumns.includes(col)
-                      ? 'text-blue-600 bg-blue-50'
-                      : 'text-gray-400 bg-white'
+                      ? 'text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/30'
+                      : 'text-gray-400 dark:text-gray-500 bg-white dark:bg-gray-950'
                     }`}
                 >
                   {col.replace(/_/g, ' ')}
@@ -65,12 +65,12 @@ export default function DataTable({
             {loading ? (
               <tr>
                 <td colSpan={columns.length} className="px-4 py-16 text-center">
-                  <Loader2 className="w-5 h-5 text-gray-400 animate-spin mx-auto" />
+                  <Loader2 className="w-5 h-5 text-gray-400 dark:text-gray-600 animate-spin mx-auto" />
                 </td>
               </tr>
             ) : rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className="px-4 py-16 text-center text-sm text-gray-400">
+                <td colSpan={columns.length} className="px-4 py-16 text-center text-sm text-gray-400 dark:text-gray-600">
                   No data
                 </td>
               </tr>
@@ -81,8 +81,10 @@ export default function DataTable({
                 return (
                   <tr
                     key={rowId ?? i}
-                    className={`border-b border-gray-50 transition-colors
-                      ${isHighlighted ? 'bg-blue-50' : 'hover:bg-gray-50/70'}`}
+                    className={`border-b border-gray-50 dark:border-gray-800/60 transition-colors
+                      ${isHighlighted
+                        ? 'bg-blue-50 dark:bg-blue-900/20'
+                        : 'hover:bg-gray-50/70 dark:hover:bg-gray-800/40'}`}
                   >
                     {columns.map((col) => {
                       const value = row[col];
@@ -91,14 +93,17 @@ export default function DataTable({
                         <td
                           key={col}
                           className={`px-4 py-2.5 whitespace-nowrap
-                            ${isHighCol && !isHighlighted ? 'bg-blue-50/40' : ''}`}
+                            ${isHighCol && !isHighlighted ? 'bg-blue-50/40 dark:bg-blue-900/10' : ''}`}
                         >
                           {isStatusValue(value) ? (
                             <StatusBadge value={value} />
                           ) : (
                             <span
-                              className={`text-gray-700
-                                ${isMonoColumn(col) ? 'font-mono text-xs text-gray-500' : 'text-sm'}`}
+                              className={
+                                isMonoColumn(col)
+                                  ? 'font-mono text-xs text-gray-500 dark:text-gray-400'
+                                  : 'text-sm text-gray-700 dark:text-gray-300'
+                              }
                             >
                               {formatCell(value)}
                             </span>
@@ -115,8 +120,8 @@ export default function DataTable({
       </div>
 
       {/* Pagination footer */}
-      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 bg-white flex-shrink-0">
-        <span className="text-xs text-gray-400 font-mono">
+      <div className="flex items-center justify-between px-4 py-3 border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 flex-shrink-0">
+        <span className="text-xs text-gray-400 dark:text-gray-500 font-mono">
           Showing rows {startRow}–{endRow} of {totalRows.toLocaleString()}
         </span>
 
@@ -124,21 +129,21 @@ export default function DataTable({
           <button
             onClick={() => onPageChange(page - 1)}
             disabled={page <= 1 || loading}
-            className="p-1.5 rounded-md hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Previous page"
           >
-            <ChevronLeft className="w-4 h-4 text-gray-500" />
+            <ChevronLeft className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
-          <span className="text-xs text-gray-500 font-mono px-2 min-w-[60px] text-center">
+          <span className="text-xs text-gray-500 dark:text-gray-400 font-mono px-2 min-w-[60px] text-center">
             {page} / {totalPages}
           </span>
           <button
             onClick={() => onPageChange(page + 1)}
             disabled={page >= totalPages || loading}
-            className="p-1.5 rounded-md hover:bg-gray-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            className="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             aria-label="Next page"
           >
-            <ChevronRight className="w-4 h-4 text-gray-500" />
+            <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />
           </button>
         </div>
       </div>

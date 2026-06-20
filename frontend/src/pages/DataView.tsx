@@ -32,7 +32,7 @@ export default function DataView() {
         onToggleSidebar={() => setSidebarOpen(v => !v)}
       />
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden px-2">
         <div className="flex-1 overflow-hidden">
           <DataTable
             columns={columns}

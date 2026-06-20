@@ -11,7 +11,7 @@ export default function Home() {
     <main className="flex-1 flex flex-col items-center justify-center p-6 max-w-4xl mx-auto w-full">
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4 font-mono">CSV data explorer</h1>
-        <p className="text-gray-500 max-w-lg mx-auto leading-relaxed">
+        <p className="text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed">
           Upload any CSV file. Browse paginated rows, detect column types, and ask an AI to analyze patterns in your data.
         </p>
       </div>
