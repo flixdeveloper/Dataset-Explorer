@@ -15,12 +15,6 @@ class DataResponse(BaseModel):
     page: int = 1
 
 
-class FilterCondition(BaseModel):
-    column: str
-    operator: Literal["==", "!=", ">", ">=", "<", "<="]
-    value: Any
-
-
 # TODO: add columns and filters
 #    columns: list[str] | None = None
 #    filters: list[FilterCondition] | None = None
@@ -44,8 +38,17 @@ class QuestionResponse(BaseModel):
 
 
 
+class AskRequest(BaseModel):
+    question: str
+
+
 class LLMResponse(BaseModel):
     sql_query: list[str]= Field(default_factory=list)
     response: str
     context_used: ContextUsed = Field(default_factory=ContextUsed)
     did_finish: bool
+
+
+
+class SuggestionsResponse(BaseModel):
+    questions: list[str]

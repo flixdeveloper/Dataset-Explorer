@@ -32,3 +32,8 @@ export async function askQuestion(question: string): Promise<QuestionResponse> {
   });
   return handleResponse<QuestionResponse>(res);
 }
+
+export async function fetchSuggestions(): Promise<{ questions: string[] }> {
+  const res = await fetch(`${API_BASE}/suggestions`);
+  return handleResponse<{ questions: string[] }>(res);
+}

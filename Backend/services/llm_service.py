@@ -2,10 +2,10 @@ import json
 from google import genai
 from google.genai import types
 from core.config import settings
-from models.schemas import ContextUsed, LLMResponse, QuestionResponse
+from models.schemas import ContextUsed, LLMResponse, QuestionResponse, SuggestionsResponse
 from fastapi import HTTPException
 from services.data_service import data_service
-from core.prompts import AGENT_PROMPT
+from core.prompts import AGENT_PROMPT, SUGGESTIONS_PROMPT
 
 class LLMService:
     def __init__(self):
@@ -126,5 +126,28 @@ class LLMService:
                 status_code=503, 
                 detail=f"Gemini API connection failure: {str(e)}"
             )
+
+    async def generate_suggestions(self) -> SuggestionsResponse:
+        try:
+            context = data_service.get_llm_context()
+        except HTTPException as e:
+            raise e
+
+        try:
+            response = await self.client.aio.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=f"<context>\n{context}\n</context>",
+                config=types.GenerateContentConfig(
+                    system_instruction=SUGGESTIONS_PROMPT,
+                    response_mime_type="application/json",
+                    response_schema=SuggestionsResponse,
+                    temperature=0.7,
+                ),
+            )
+            return SuggestionsResponse.model_validate_json(response.text)
+        except json.JSONDecodeError:
+            raise HTTPException(status_code=500, detail="LLM returned an invalid JSON string format.")
+        except Exception as e:
+            raise HTTPException(status_code=503, detail=f"Gemini API connection failure: {str(e)}")
 
 llm_service = LLMService()
