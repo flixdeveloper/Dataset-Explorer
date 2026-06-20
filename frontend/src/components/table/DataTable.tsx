@@ -77,10 +77,9 @@ export default function DataTable({
     pageCount: totalPages,
   });
 
-  const isFiltering     = globalFilter.trim().length > 0;
-  const filteredCount   = table.getFilteredRowModel().rows.length;
-  const visibleColCount = table.getVisibleLeafColumns().length;
-  const hiddenCount     = Object.values(columnVisibility).filter((v) => v === false).length;
+  const isFiltering   = globalFilter.trim().length > 0;
+  const filteredCount = table.getFilteredRowModel().rows.length;
+  const hiddenCount   = Object.values(columnVisibility).filter((v) => v === false).length;
 
   const leafColumns = table.getAllLeafColumns().map((col) => ({
     id: col.id,
@@ -98,10 +97,8 @@ export default function DataTable({
       />
       <TableBody
         table={table}
-        loading={loading}
         isFiltering={isFiltering}
         globalFilter={globalFilter}
-        visibleColCount={visibleColCount}
         highlightedRows={highlightedRows}
         highlightedColumns={highlightedColumns}
       />

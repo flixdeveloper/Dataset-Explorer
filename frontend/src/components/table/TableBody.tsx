@@ -1,23 +1,18 @@
 import { flexRender, type Table } from '@tanstack/react-table';
-import { Loader2 } from 'lucide-react';
 import SortIcon from './SortIcon';
 
 interface TableBodyProps {
   table: Table<Record<string, unknown>>;
-  loading: boolean;
   isFiltering: boolean;
   globalFilter: string;
-  visibleColCount: number;
   highlightedRows: number[];
   highlightedColumns: string[];
 }
 
 export default function TableBody({
   table,
-  loading,
   isFiltering,
   globalFilter,
-  visibleColCount,
   highlightedRows,
   highlightedColumns,
 }: TableBodyProps) {
@@ -52,15 +47,9 @@ export default function TableBody({
         </thead>
 
         <tbody>
-          {loading ? (
+          {table.getRowModel().rows.length === 0 ? (
             <tr>
-              <td colSpan={visibleColCount} className="px-4 py-16 text-center">
-                <Loader2 className="w-5 h-5 text-gray-400 dark:text-gray-600 animate-spin mx-auto" />
-              </td>
-            </tr>
-          ) : table.getRowModel().rows.length === 0 ? (
-            <tr>
-              <td colSpan={visibleColCount} className="px-4 py-16 text-center text-sm text-gray-400 dark:text-gray-600">
+              <td colSpan={table.getVisibleLeafColumns().length} className="px-4 py-16 text-center text-sm text-gray-400 dark:text-gray-600">
                 {isFiltering ? `No rows match "${globalFilter}"` : 'No data'}
               </td>
             </tr>
