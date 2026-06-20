@@ -41,7 +41,8 @@ class DataService:
                 status_code=500,
                 detail=f"An unexpected server error occurred: {str(e)}",
             )
-
+        
+        self.df.reset_index(names='__sys_agent_row_id__', inplace=True)
         self.filename = file.filename
         rows_count = len(self.df)
 

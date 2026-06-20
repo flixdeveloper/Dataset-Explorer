@@ -1,6 +1,6 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class UploadResponse(BaseModel):
@@ -26,15 +26,6 @@ class FilterCondition(BaseModel):
 #    filters: list[FilterCondition] | None = None
 
 
-class LLMResponse(BaseModel):
-    sql_query: list[str]
-    response: str
-    context_used: ContextUsed
-    did_finish: bool
-
-
-
-
 
 class CellReference(BaseModel):
     row_index: int
@@ -42,10 +33,19 @@ class CellReference(BaseModel):
     model_config = ConfigDict(frozen=True)
 
 class ContextUsed(BaseModel):
-    used_rows: list[int]
-    used_columns: list[str]
-    used_cells: list[CellReference]
+    used_rows: list[int]= Field(default_factory=list)
+    used_columns: list[str]= Field(default_factory=list)
+    used_cells: list[CellReference]= Field(default_factory=list)
 
 class QuestionResponse(BaseModel):
     answer: str
     context_used: ContextUsed
+
+
+
+
+class LLMResponse(BaseModel):
+    sql_query: list[str]= Field(default_factory=list)
+    response: str
+    context_used: ContextUsed = Field(default_factory=ContextUsed)
+    did_finish: bool
