@@ -3,7 +3,7 @@ import ChatHeader from './ChatHeader';
 import SuggestionList from './SuggestionList';
 import MessageList from './MessageList';
 import ChatInput from './ChatInput';
-import { useChatState } from './useChatState';
+import useChatState from './useChatState';
 
 interface ChatPanelProps {
   open: boolean;

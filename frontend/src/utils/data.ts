@@ -1,7 +1,6 @@
 /**
  * Converts the backend's columnar array format (list of value arrays)
  * into an array of row objects keyed by column name.
- * A synthetic `id` field (row index) is added for use as DataTable row key.
  */
 export function toRowObjects(
   columns: string[],

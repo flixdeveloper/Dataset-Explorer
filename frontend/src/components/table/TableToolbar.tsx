@@ -1,6 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
+import { useClickOutside } from '../../hooks/useClickOutside';
 export interface ColumnMeta {
   id: string;
   isVisible: boolean;
@@ -24,17 +25,9 @@ export default function TableToolbar({
   const colsRef = useRef<HTMLDivElement>(null);
   const isFiltering = globalFilter.trim().length > 0;
 
-  useEffect(() => {
-    function onMouseDown(e: MouseEvent) {
-      if (colsRef.current && !colsRef.current.contains(e.target as Node))
-        setColsOpen(false);
-    }
-    document.addEventListener('mousedown', onMouseDown);
-    return () => document.removeEventListener('mousedown', onMouseDown);
-  }, []);
+  useClickOutside(colsRef, () => setColsOpen(false));
 
-  return (
-    <div className="flex items-center gap-3 px-4 py-2.5 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
+  return (    <div className="flex items-center gap-3 px-4 py-2.5 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
 
       {/* Global search */}
       <div className="relative flex-1 max-w-sm">

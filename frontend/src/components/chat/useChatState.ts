@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react';
 import { askQuestion, fetchSuggestions } from '../../services/api';
-import type { ChatMessage, QuestionResponse } from '../../types';
+import type { QuestionResponse } from '../../types/api';
+import type { ChatMessage } from '../../types/chat';
 
 export interface ChatState {
   messages: ChatMessage[];
@@ -72,7 +73,7 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
   }
 }
 
-export function useChatState(datasetFilename: string | undefined) {
+export default function useChatState(datasetFilename: string | undefined) {
   const [state, dispatch] = useReducer(chatReducer, initialState);
 
   useEffect(() => {

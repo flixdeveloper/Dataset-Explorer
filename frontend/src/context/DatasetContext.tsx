@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import { fetchRows, uploadCSV } from '../services/api';
-import type { DataResponse } from '../types';
+import type { DataResponse } from '../types/api';
 import { toRowObjects } from '../utils/data';
 import {
   PAGE_SIZE,
