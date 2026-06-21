@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import { flexRender, type Table } from '@tanstack/react-table';
 import SortIcon from './SortIcon';
 
@@ -9,7 +10,7 @@ interface TableBodyProps {
   highlightedColumns: string[];
 }
 
-export default function TableBody({
+function TableBody({
   table,
   isFiltering,
   globalFilter,
@@ -87,3 +88,5 @@ export default function TableBody({
     </div>
   );
 }
+
+export default memo(TableBody);

@@ -29,6 +29,7 @@ export default function DataTable({
   const {
     table,
     globalFilter,
+    deferredFilter,
     setGlobalFilter,
     isFiltering,
     filteredCount,
@@ -50,7 +51,7 @@ export default function DataTable({
       <TableBody
         table={table}
         isFiltering={isFiltering}
-        globalFilter={globalFilter}
+        globalFilter={deferredFilter}
         highlightedRows={highlightedRows}
         highlightedColumns={highlightedColumns}
       />

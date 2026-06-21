@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import DataViewHeader from '@/shared/components/DataViewHeader';
@@ -14,13 +14,17 @@ export default function DataView() {
   const { loadPage } = useDatasetActions();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
+  const columns = useMemo(
+    () => (table ? table.columns.filter(c => c !== SYSTEM_COL) : []),
+    [table],
+  );
+
   useEffect(() => {
     if (!table) navigate('/', { replace: true });
   }, [table, navigate]);
 
   if (!table) return null;
 
-  const columns   = table.columns.filter(c => c !== SYSTEM_COL);
   const rows      = table.rows;
   const totalRows = table.totalRows;
   const page      = table.page;

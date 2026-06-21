@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useDeferredValue, useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
@@ -33,6 +33,8 @@ export function useDataTable({ columns, rows, totalRows, page, pageSize }: UseDa
     setGlobalFilter,
   } = useTableFilters();
 
+  const deferredFilter = useDeferredValue(globalFilter);
+
   const columnDefs = useMemo<ColumnDef<Record<string, unknown>>[]>(
     () =>
       columns.map((col) => ({
@@ -53,7 +55,7 @@ export function useDataTable({ columns, rows, totalRows, page, pageSize }: UseDa
   const table = useReactTable({
     data: rows,
     columns: columnDefs,
-    state: { sorting, columnVisibility, globalFilter },
+    state: { sorting, columnVisibility, globalFilter: deferredFilter },
     onSortingChange: setSorting,
     onColumnVisibilityChange: setColumnVisibility,
     onGlobalFilterChange: setGlobalFilter,
@@ -65,7 +67,7 @@ export function useDataTable({ columns, rows, totalRows, page, pageSize }: UseDa
     pageCount: totalPages,
   });
 
-  const isFiltering   = globalFilter.trim().length > 0;
+  const isFiltering   = deferredFilter.trim().length > 0;
   const filteredCount = table.getFilteredRowModel().rows.length;
   const hiddenCount   = Object.values(columnVisibility).filter((v) => v === false).length;
 
@@ -78,6 +80,7 @@ export function useDataTable({ columns, rows, totalRows, page, pageSize }: UseDa
   return {
     table,
     globalFilter,
+    deferredFilter,
     setGlobalFilter,
     isFiltering,
     filteredCount,
