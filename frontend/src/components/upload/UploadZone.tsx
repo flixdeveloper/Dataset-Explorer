@@ -1,4 +1,5 @@
-import { useRef, useState } from 'react';
+import { useCallback } from 'react';
+import { useDropzone, type FileRejection } from 'react-dropzone';
 import { UploadCloud, FileText, Loader2 } from 'lucide-react';
 
 interface UploadZoneProps {
@@ -8,45 +9,44 @@ interface UploadZoneProps {
 }
 
 export default function UploadZone({ onUpload, onError, isLoading = false }: UploadZoneProps) {
-  const [isDragging, setIsDragging] = useState(false);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const onDrop = useCallback(
+    (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+      if (file) onUpload(file);
+    },
+    [onUpload],
+  );
 
-  function handleFile(file: File | undefined) {
-    if (!file) return;
-    if (!file.name.endsWith('.csv')) {
-      onError?.(`"${file.name}" is not a CSV file. Please upload a .csv file.`);
-      return;
-    }
-    onUpload(file);
-  }
+  const onDropRejected = useCallback(
+    (rejections: FileRejection[]) => {
+      const file = rejections[0]?.file;
+      if (file) {
+        onError?.(`"${file.name}" is not a CSV file. Please upload a .csv file.`);
+      }
+    },
+    [onError],
+  );
 
-  function onDrop(e: React.DragEvent) {
-    e.preventDefault();
-    setIsDragging(false);
-    handleFile(e.dataTransfer.files[0]);
-  }
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    accept: { 'text/csv': ['.csv'] },
+    multiple: false,
+    disabled: isLoading,
+    onDrop,
+    onDropRejected,
+  });
 
   return (
     <>
       <div
-        onClick={() => !isLoading && inputRef.current?.click()}
-        onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
-        onDragLeave={() => setIsDragging(false)}
-        onDrop={onDrop}
+        {...getRootProps()}
         className={`w-full max-w-2xl border-2 border-dashed rounded-xl p-12 flex flex-col items-center justify-center transition-colors
           ${isLoading ? 'cursor-not-allowed opacity-60' : 'cursor-pointer'}
-          ${isDragging
+          ${isDragActive
             ? 'border-blue-400 bg-blue-50 dark:bg-blue-900/20'
             : 'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800/50'
           }`}
       >
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".csv"
-          className="hidden"
-          onChange={(e) => handleFile(e.target.files?.[0])}
-        />
+        <input {...getInputProps()} />
         <div className="bg-white dark:bg-gray-900 p-3 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700 mb-4">
           {isLoading
             ? <Loader2 className="w-6 h-6 text-blue-500 animate-spin" />

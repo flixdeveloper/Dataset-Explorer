@@ -135,7 +135,7 @@ class LLMService:
 
         try:
             response = await self.client.aio.models.generate_content(
-                model='gemini-1.5-flash-8b',
+                model='gemini-2.5-flash-lite',
                 contents=f"<context>\n{context}\n</context>",
                 config=types.GenerateContentConfig(
                     system_instruction=SUGGESTIONS_PROMPT,
