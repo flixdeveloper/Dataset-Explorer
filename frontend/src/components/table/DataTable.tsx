@@ -1,17 +1,7 @@
-import { useMemo } from 'react';
-import {
-  useReactTable,
-  getCoreRowModel,
-  getSortedRowModel,
-  getFilteredRowModel,
-  type ColumnDef,
-} from '@tanstack/react-table';
-
-import { isMonoColumn, formatCell } from './tableUtils';
-import TableToolbar from './TableToolbar';
-import TableBody from './TableBody';
-import TablePagination from './TablePagination';
-import { useTableFilters } from './useTableFilters';
+import TableToolbar from '@/components/table/TableToolbar';
+import TableBody from '@/components/table/TableBody';
+import TablePagination from '@/components/table/TablePagination';
+import { useDataTable } from '@/components/table/useDataTable';
 
 interface DataTableProps {
   columns: string[];
@@ -36,60 +26,18 @@ export default function DataTable({
   highlightedRows = [],
   highlightedColumns = [],
 }: DataTableProps) {
-  const totalPages = Math.ceil(totalRows / pageSize);
-  const startRow   = (page - 1) * pageSize + 1;
-  const endRow     = Math.min(page * pageSize, totalRows);
-
   const {
-    sorting,
-    setSorting,
-    columnVisibility,
-    setColumnVisibility,
+    table,
     globalFilter,
     setGlobalFilter,
-  } = useTableFilters();
-
-  const columnDefs = useMemo<ColumnDef<Record<string, unknown>>[]>(
-    () =>
-      columns.map((col) => ({
-        accessorKey: col,
-        header: col.replace(/_/g, ' '),
-        cell: ({ getValue }) => (
-          <span className={isMonoColumn(col)
-            ? 'font-mono text-xs text-gray-500 dark:text-gray-400'
-            : 'text-sm text-gray-700 dark:text-gray-300'}>
-            {formatCell(getValue())}
-          </span>
-        ),
-        filterFn: 'includesString',
-      })),
-    [columns],
-  );
-
-  const table = useReactTable({
-    data: rows,
-    columns: columnDefs,
-    state: { sorting, columnVisibility, globalFilter },
-    onSortingChange: setSorting,
-    onColumnVisibilityChange: setColumnVisibility,
-    onGlobalFilterChange: setGlobalFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: 'includesString',
-    manualPagination: true,
-    pageCount: totalPages,
-  });
-
-  const isFiltering   = globalFilter.trim().length > 0;
-  const filteredCount = table.getFilteredRowModel().rows.length;
-  const hiddenCount   = Object.values(columnVisibility).filter((v) => v === false).length;
-
-  const leafColumns = table.getAllLeafColumns().map((col) => ({
-    id: col.id,
-    isVisible: col.getIsVisible(),
-    toggle: col.getToggleVisibilityHandler() as () => void,
-  }));
+    isFiltering,
+    filteredCount,
+    hiddenCount,
+    leafColumns,
+    totalPages,
+    startRow,
+    endRow,
+  } = useDataTable({ columns, rows, totalRows, page, pageSize });
 
   return (
     <div className="flex flex-col h-full bg-white dark:bg-gray-950">

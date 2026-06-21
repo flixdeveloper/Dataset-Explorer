@@ -1,6 +1,6 @@
 import { Database, Moon, Sun } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useDarkMode } from '../../hooks/useDarkMode';
+import { useDarkMode } from '@/hooks/useDarkMode';
 
 export default function Header() {
   const { isDark, toggle } = useDarkMode();

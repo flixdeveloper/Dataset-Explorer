@@ -1,4 +1,4 @@
-import type { ContextUsed } from './api';
+import type { ContextUsed } from '@/types/api';
 
 export interface ChatMessage {
   role: 'user' | 'assistant';

@@ -1,12 +1,8 @@
 import { useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
-import { useClickOutside } from '../../hooks/useClickOutside';
-export interface ColumnMeta {
-  id: string;
-  isVisible: boolean;
-  toggle: () => void;
-}
+import { useClickOutside } from '@/hooks/useClickOutside';
+import type { ColumnMeta } from '@/components/table/tableTypes';
 
 interface TableToolbarProps {
   globalFilter: string;

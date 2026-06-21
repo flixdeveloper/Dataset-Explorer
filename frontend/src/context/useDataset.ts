@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 
-import { DatasetActionsContext, DatasetStateContext } from './DatasetContext';
+import { DatasetActionsContext, DatasetStateContext } from '@/context/DatasetContext';
 import type {
   DatasetActionsContextValue,
   DatasetContextValue,
   DatasetStateContextValue,
-} from './datasetTypes';
+} from '@/context/datasetTypes';
 
 export function useDatasetState(): DatasetStateContextValue {
   const ctx = useContext(DatasetStateContext);

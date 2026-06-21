@@ -1,9 +1,9 @@
-import { useDatasetState } from '../../context/useDataset';
-import ChatHeader from './ChatHeader';
-import SuggestionList from './SuggestionList';
-import MessageList from './MessageList';
-import ChatInput from './ChatInput';
-import useChatState from './useChatState';
+import { useDatasetState } from '@/context/useDataset';
+import ChatHeader from '@/components/chat/ChatHeader';
+import SuggestionList from '@/components/chat/SuggestionList';
+import MessageList from '@/components/chat/MessageList';
+import ChatInput from '@/components/chat/ChatInput';
+import { useChatState } from '@/components/chat/useChatState';
 
 interface ChatPanelProps {
   open: boolean;
