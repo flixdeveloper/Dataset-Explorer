@@ -3,10 +3,11 @@ import { LayoutGrid, Type, Sparkles } from 'lucide-react';
 
 import UploadZone from '../components/upload/UploadZone';
 import FeatureCard from '../components/layout/FeatureCard';
-import { useDataset } from '../context/DatasetContext';
+import { useDatasetActions, useDatasetState } from '../context/useDataset';
 
 export default function Home() {
-  const { handleUpload, isLoading } = useDataset();
+  const { isLoading } = useDatasetState();
+  const { handleUpload } = useDatasetActions();
 
   function handleError(message: string) {
     toast.error(message);

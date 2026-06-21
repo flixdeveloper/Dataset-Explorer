@@ -4,14 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import DataViewHeader from '../components/layout/DataViewHeader';
 import DataTable from '../components/table/DataTable';
 import ChatPanel from '../components/chat/ChatPanel';
-import { useDataset, PAGE_SIZE } from '../context/DatasetContext';
+import { useDatasetActions, useDatasetState } from '../context/useDataset';
+import { PAGE_SIZE } from '../context/datasetTypes';
 import { MOCK_COLUMNS, MOCK_ROWS } from '../data/mockData';
 
 const SYSTEM_COL = '__sys_agent_row_id__';
 
 export default function DataView() {
   const navigate = useNavigate();
-  const { table, isLoading, loadPage } = useDataset();
+  const { table, isLoading } = useDatasetState();
+  const { loadPage } = useDatasetActions();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const isMock    = !table;

@@ -1,7 +1,7 @@
 import {
   createContext,
   useCallback,
-  useContext,
+  useMemo,
   useState,
   type ReactNode,
 } from 'react';
@@ -11,31 +11,15 @@ import { toast } from 'sonner';
 import { fetchRows, uploadCSV } from '../services/api';
 import type { DataResponse } from '../types';
 import { toRowObjects } from '../utils/data';
+import {
+  PAGE_SIZE,
+  type DatasetActionsContextValue,
+  type DatasetStateContextValue,
+  type TableState,
+} from './datasetTypes';
 
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-export const PAGE_SIZE = 50;
-
-export interface TableState {
-  filename: string;
-  columns: string[];
-  rows: Record<string, unknown>[];
-  totalRows: number;
-  page: number;
-}
-
-// ── Context shape ─────────────────────────────────────────────────────────────
-
-interface DatasetContextValue {
-  table: TableState | null;
-  isLoading: boolean;
-  handleUpload: (file: File) => Promise<void>;
-  loadPage: (page: number) => Promise<void>;
-}
-
-const DatasetContext = createContext<DatasetContextValue | null>(null);
-
-// ── Provider ──────────────────────────────────────────────────────────────────
+export const DatasetStateContext = createContext<DatasetStateContextValue | null>(null);
+export const DatasetActionsContext = createContext<DatasetActionsContextValue | null>(null);
 
 export function DatasetProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
@@ -84,17 +68,21 @@ export function DatasetProvider({ children }: { children: ReactNode }) {
     [navigate],
   );
 
-  return (
-    <DatasetContext.Provider value={{ table, isLoading, handleUpload, loadPage }}>
-      {children}
-    </DatasetContext.Provider>
+  const stateValue = useMemo(
+    () => ({ table, isLoading }),
+    [table, isLoading],
   );
-}
 
-// ── Hook ──────────────────────────────────────────────────────────────────────
+  const actionsValue = useMemo(
+    () => ({ handleUpload, loadPage }),
+    [handleUpload, loadPage],
+  );
 
-export function useDataset(): DatasetContextValue {
-  const ctx = useContext(DatasetContext);
-  if (!ctx) throw new Error('useDataset must be used inside <DatasetProvider>');
-  return ctx;
+  return (
+    <DatasetStateContext.Provider value={stateValue}>
+      <DatasetActionsContext.Provider value={actionsValue}>
+        {children}
+      </DatasetActionsContext.Provider>
+    </DatasetStateContext.Provider>
+  );
 }

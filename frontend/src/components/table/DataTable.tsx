@@ -1,18 +1,17 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import {
   useReactTable,
   getCoreRowModel,
   getSortedRowModel,
   getFilteredRowModel,
   type ColumnDef,
-  type SortingState,
-  type VisibilityState,
 } from '@tanstack/react-table';
 
 import { isMonoColumn, formatCell } from './tableUtils';
 import TableToolbar from './TableToolbar';
 import TableBody from './TableBody';
 import TablePagination from './TablePagination';
+import { useTableFilters } from './useTableFilters';
 
 interface DataTableProps {
   columns: string[];
@@ -41,9 +40,14 @@ export default function DataTable({
   const startRow   = (page - 1) * pageSize + 1;
   const endRow     = Math.min(page * pageSize, totalRows);
 
-  const [sorting,          setSorting]          = useState<SortingState>([]);
-  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
-  const [globalFilter,     setGlobalFilter]     = useState('');
+  const {
+    sorting,
+    setSorting,
+    columnVisibility,
+    setColumnVisibility,
+    globalFilter,
+    setGlobalFilter,
+  } = useTableFilters();
 
   const columnDefs = useMemo<ColumnDef<Record<string, unknown>>[]>(
     () =>
