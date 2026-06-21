@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import DataViewHeader from '../components/layout/DataViewHeader';
@@ -6,7 +6,6 @@ import DataTable from '../components/table/DataTable';
 import ChatPanel from '../components/chat/ChatPanel';
 import { useDatasetActions, useDatasetState } from '../context/useDataset';
 import { PAGE_SIZE } from '../context/datasetTypes';
-import { MOCK_COLUMNS, MOCK_ROWS } from '../data/mockData';
 
 const SYSTEM_COL = '__sys_agent_row_id__';
 
@@ -16,12 +15,17 @@ export default function DataView() {
   const { loadPage } = useDatasetActions();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const isMock    = !table;
-  const columns   = isMock ? MOCK_COLUMNS : table.columns.filter(c => c !== SYSTEM_COL);
-  const rows      = isMock ? MOCK_ROWS    : table.rows;
-  const totalRows = isMock ? MOCK_ROWS.length : table.totalRows;
-  const page      = isMock ? 1               : table.page;
-  const filename  = isMock ? 'sample_orders.csv' : table.filename;
+  useEffect(() => {
+    if (!table) navigate('/', { replace: true });
+  }, [table, navigate]);
+
+  if (!table) return null;
+
+  const columns   = table.columns.filter(c => c !== SYSTEM_COL);
+  const rows      = table.rows;
+  const totalRows = table.totalRows;
+  const page      = table.page;
+  const filename  = table.filename;
 
   return (
     <div className="flex-1 flex flex-col overflow-hidden">
@@ -43,7 +47,7 @@ export default function DataView() {
             page={page}
             pageSize={PAGE_SIZE}
             loading={isLoading}
-            onPageChange={isMock ? () => {} : loadPage}
+            onPageChange={loadPage}
           />
         </div>
 
