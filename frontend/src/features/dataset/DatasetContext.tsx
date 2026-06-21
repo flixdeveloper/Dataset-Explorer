@@ -8,15 +8,15 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { fetchRows, uploadCSV } from '@/services/api';
-import type { DataResponse } from '@/types/api';
-import { toRowObjects } from '@/utils/data';
+import { fetchRows, uploadCSV } from '@/shared/services/api';
+import type { DataResponse } from '@/shared/types/api';
+import { toRowObjects } from './utils';
 import {
   PAGE_SIZE,
   type DatasetActionsContextValue,
   type DatasetStateContextValue,
   type TableState,
-} from '@/context/datasetTypes';
+} from './types';
 
 export const DatasetStateContext = createContext<DatasetStateContextValue | null>(null);
 export const DatasetActionsContext = createContext<DatasetActionsContextValue | null>(null);

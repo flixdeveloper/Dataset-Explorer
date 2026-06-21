@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
-import { useClickOutside } from '@/hooks/useClickOutside';
-import type { ColumnMeta } from '@/components/table/tableTypes';
+import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import type { ColumnMeta } from '../types';
 
 interface TableToolbarProps {
   globalFilter: string;
@@ -23,7 +23,8 @@ export default function TableToolbar({
 
   useClickOutside(colsRef, () => setColsOpen(false));
 
-  return (    <div className="flex items-center gap-3 px-4 py-2.5 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
+  return (
+    <div className="flex items-center gap-3 px-4 py-2.5 border-b border-gray-100 dark:border-gray-800 flex-shrink-0">
 
       {/* Global search */}
       <div className="relative flex-1 max-w-sm">

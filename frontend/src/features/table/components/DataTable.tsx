@@ -1,7 +1,7 @@
-import TableToolbar from '@/components/table/TableToolbar';
-import TableBody from '@/components/table/TableBody';
-import TablePagination from '@/components/table/TablePagination';
-import { useDataTable } from '@/components/table/useDataTable';
+import TableToolbar from './TableToolbar';
+import TableBody from './TableBody';
+import TablePagination from './TablePagination';
+import { useDataTable } from '../hooks/useDataTable';
 
 interface DataTableProps {
   columns: string[];

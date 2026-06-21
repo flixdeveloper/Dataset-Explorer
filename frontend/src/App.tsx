@@ -1,8 +1,8 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
-import Header from '@/components/layout/Header';
-import { DatasetProvider } from '@/context/DatasetContext';
+import Header from '@/shared/components/Header';
+import { DatasetProvider } from '@/features/dataset';
 import DataView from '@/pages/DataView';
 import Home from '@/pages/Home';
 

@@ -7,9 +7,9 @@ import {
   type ColumnDef,
 } from '@tanstack/react-table';
 
-import { isMonoColumn, formatCell } from '@/components/table/tableUtils';
-import { useTableFilters } from '@/components/table/useTableFilters';
-import type { ColumnMeta } from '@/components/table/tableTypes';
+import { isMonoColumn, formatCell } from '../utils';
+import { useTableFilters } from './useTableFilters';
+import type { ColumnMeta } from '../types';
 
 interface UseDataTableOptions {
   columns: string[];

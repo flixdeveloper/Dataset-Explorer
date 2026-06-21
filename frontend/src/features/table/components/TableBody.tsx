@@ -1,5 +1,5 @@
 import { flexRender, type Table } from '@tanstack/react-table';
-import SortIcon from '@/components/table/SortIcon';
+import SortIcon from './SortIcon';
 
 interface TableBodyProps {
   table: Table<Record<string, unknown>>;

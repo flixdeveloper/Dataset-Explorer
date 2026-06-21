@@ -1,4 +1,4 @@
-import type { DataResponse, UploadResponse, QuestionResponse } from '@/types/api';
+import type { DataResponse, UploadResponse, QuestionResponse } from '@/shared/types/api';
 
 const API_BASE = 'http://localhost:8000';
 

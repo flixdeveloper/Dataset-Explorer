@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useReducer } from 'react';
-import { askQuestion, fetchSuggestions } from '@/services/api';
-import type { QuestionResponse } from '@/types/api';
-import type { ChatMessage } from '@/types/chat';
+import { askQuestion, fetchSuggestions } from '@/shared/services/api';
+import type { QuestionResponse } from '@/shared/types/api';
+import type { ChatMessage } from '../types';
 
 export interface ChatState {
   messages: ChatMessage[];

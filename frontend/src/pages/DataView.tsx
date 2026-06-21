@@ -1,11 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import DataViewHeader from '@/components/layout/DataViewHeader';
-import DataTable from '@/components/table/DataTable';
-import ChatPanel from '@/components/chat/ChatPanel';
-import { useDatasetActions, useDatasetState } from '@/context/useDataset';
-import { PAGE_SIZE } from '@/context/datasetTypes';
+import DataViewHeader from '@/shared/components/DataViewHeader';
+import { DataTable } from '@/features/table';
+import { ChatPanel } from '@/features/chat';
+import { useDatasetActions, useDatasetState, PAGE_SIZE } from '@/features/dataset';
 
 const SYSTEM_COL = '__sys_agent_row_id__';
 
