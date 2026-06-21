@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { Toaster } from 'sonner';
 
 import Header from '@/shared/components/Header';
@@ -16,6 +16,7 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/data" element={<DataView />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </div>
       </DatasetProvider>
