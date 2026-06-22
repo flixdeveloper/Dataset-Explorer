@@ -19,12 +19,13 @@ AGENT_PROMPT = """
     Only SELECT statements are permitted. DROP, DELETE, INSERT, UPDATE, ALTER, CREATE are forbidden.
     Write clean DuckDB-compatible SQL only — no markdown fences, no trailing semicolons.
 
-    CONSTRAINT 3 — TWO-PHASE PROTOCOL:
-    Phase 0 — SCHEMA CHECK (mandatory, no SQL emitted):
+    CONSTRAINT 3 — THE EXECUTION PROTOCOL:
+    PRE-FLIGHT CHECK — SCHEMA VALIDATION (mandatory, no SQL emitted):
     Before Phase 1, verify: does every term in the user's question map to a real column in the schema?
     - YES → proceed to Phase 1 normally.
     - NO → skip Phase 1. Set did_finish = true. Return the "Unable to answer" message defined in <role>.
 
+    THE TWO-PHASE REACT LOOP:
     Phase 1 (did_finish = false):
     - Write a targeted SQL query retrieving only the minimal rows/columns needed to answer the question.
     - Explain your reasoning in `response` using the checkpoint format below.

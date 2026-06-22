@@ -1,5 +1,6 @@
 from google import genai
 from google.genai import types
+from anthropic import AsyncAnthropic
 from pydantic import ValidationError
 from core.config import settings
 from models.schemas import ContextUsed, LLMResponse, QuestionResponse, SuggestionsResponse
@@ -10,7 +11,8 @@ from core.prompts import AGENT_PROMPT, SUGGESTIONS_PROMPT
 class LLMService:
     def __init__(self):
         self.MAX_TURNS = 3
-        self.client = genai.Client(api_key=settings.GOOGLE_API_KEY)
+        self.google_client = genai.Client(api_key=settings.GOOGLE_API_KEY)
+        self.anthropic_client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
 
     async def ask_question(self, question: str) -> QuestionResponse:
         try:
@@ -40,7 +42,6 @@ class LLMService:
                 prompt = f"""
                 {agent_memory}
                 </history>
-                <reminder>Follow the constraints and output ONLY valid JSON.</reminder>
                 """
                 llm_response = await self.run_agent_step(prompt)
             except Exception as e:
@@ -104,17 +105,27 @@ class LLMService:
 
     async def run_agent_step(self, prompt: str) -> LLMResponse:
         try:
-            response = await self.client.aio.models.generate_content(
-                model='gemini-2.5-flash',
-                contents=prompt,
-                config=types.GenerateContentConfig(
-                    system_instruction=AGENT_PROMPT,
-                    response_mime_type="application/json",
-                    response_schema=LLMResponse,
-                    temperature=0.1
-                ),
+            response = await self.anthropic_client.messages.create(
+                model="claude-3-5-sonnet-20240620",
+                system=AGENT_PROMPT,
+                max_tokens=4096,
+                temperature=0.1,
+                messages=[{"role": "user", "content": prompt}],
+                tool_choice={"type": "tool", "name": "pydantic_schema"},
+                tools=[
+                    {
+                        "name": "pydantic_schema",
+                        "description": "The JSON schema for the response.",
+                        "input_schema": LLMResponse.model_json_schema(),
+                    }
+                ],
             )
-            return LLMResponse.model_validate_json(response.text)
+            
+            tool_call = next((block for block in response.content if block.type == 'tool_use'), None)
+            if not tool_call:
+                raise HTTPException(status_code=500, detail="LLM did not return a valid tool call.")
+
+            return LLMResponse.model_validate(tool_call.input)
 
         except ValidationError:
             raise HTTPException(
@@ -124,7 +135,7 @@ class LLMService:
         except Exception as e:
             raise HTTPException(
                 status_code=503,
-                detail=f"Gemini API connection failure: {str(e)}"
+                detail=f"Anthropic API connection failure: {str(e)}"
             )
 
     async def generate_suggestions(self) -> SuggestionsResponse:
@@ -134,7 +145,7 @@ class LLMService:
             raise e
 
         try:
-            response = await self.client.aio.models.generate_content(
+            response = await self.google_client.aio.models.generate_content(
                 model='gemini-2.5-flash-lite',
                 contents=f"<context>\n{context}\n</context>",
                 config=types.GenerateContentConfig(
