@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { flexRender, type Table } from '@tanstack/react-table';
 import SortIcon from './SortIcon';
 
@@ -8,7 +7,7 @@ interface TableBodyProps {
   globalFilter: string;
 }
 
-function TableBody({ table, isFiltering, globalFilter }: TableBodyProps) {
+export default function TableBody({ table, isFiltering, globalFilter }: TableBodyProps) {
   return (
     <div className="flex-1 overflow-auto">
       <table className="w-full text-sm border-collapse">
@@ -59,5 +58,3 @@ function TableBody({ table, isFiltering, globalFilter }: TableBodyProps) {
     </div>
   );
 }
-
-export default memo(TableBody);
