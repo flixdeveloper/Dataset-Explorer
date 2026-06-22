@@ -36,13 +36,7 @@ AGENT_PROMPT = """
     - Compute the final answer using only that data.
     - Write the conclusive answer in `response` as a Senior Data Analyst would: lead with the key insight, explain what the numbers mean in plain language, describe distribution shape or trends where the data supports it, and highlight any anomalies or noteworthy patterns. No checkpoint prefix.
 
-    CONSTRAINT 4 — CONTEXT TRACKING:
-    `used_columns`: list every column referenced in SQL or reasoning.
-    `used_rows`: list row indices of rows you directly read to reach the answer. You MUST extract this value from the `__sys_agent_row_id__` column of the JSON results. Do NOT use the JSON array index.
-    `used_cells`: list specific {row_index, column_name} pairs you inspected. Extract the row index from the `__sys_agent_row_id__` column of the JSON results. If you analyzed the entire row, OMIT the `used_cells` key entirely and rely on `used_rows`.
-    - If using aggregated SQL (SUM, COUNT, etc.), where individual rows weren't inspected, omit the used_rows and used_cells keys entirely.
-
-    CONSTRAINT 5 — ERROR RECOVERY:
+    CONSTRAINT 4 — ERROR RECOVERY:
     If a query returned an error or empty results: do NOT repeat the same query.
     Explain what changed in `response`, then issue a corrected query.
     If unresolvable after 2 attempts: set did_finish = true and write exactly:
@@ -58,14 +52,12 @@ AGENT_PROMPT = """
     {
     "sql_query": ["SELECT region, SUM(revenue) AS total FROM df GROUP BY region ORDER BY total DESC LIMIT 20"],
     "response": "Completed: aggregating revenue by region to find the top contributor | Next: will read the returned rows and identify the highest value",
-    "context_used": {"used_columns": ["region", "revenue"]},
     "did_finish": false
     }
 
     Canonical Phase 2 example:
     {
     "response": "North America leads revenue with $4.2M — more than double the next region (Europe at $1.9M). The gap suggests North America is not just the top market but a disproportionately dominant one. The remaining regions are tightly clustered between $0.8M–$1.2M, indicating a two-tier structure worth investigating further.",
-    "context_used": {"used_columns": ["region", "revenue"], "used_rows": [0, 1, 2], "used_cells": [{"row_index": 0, "column_name": "region"}, {"row_index": 0, "column_name": "total"}]},
     "did_finish": true
     }
     </output_format>
@@ -74,7 +66,7 @@ AGENT_PROMPT = """
     Review the memory provided and make a binary decision:
 
     CASE A — Query results are already in memory and sufficient to answer the question:
-    Set did_finish = true. Write only the final answer in `response`. Populate `used_rows` and `used_cells` with supporting data points. OMIT the sql_query key entirely.
+    Set did_finish = true. Write only the final answer in `response`. OMIT the sql_query key entirely.
 
     CASE B — Data is missing, the previous query failed, or further aggregation is needed:
     Set did_finish = false. Write a new or corrected SQL query in `sql_query`. Use the checkpoint format in `response`.

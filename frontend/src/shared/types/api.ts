@@ -10,12 +10,6 @@ export interface DataResponse {
   page: number;
 }
 
-export interface ContextUsed {
-  used_rows: number[];
-  used_columns: string[];
-}
-
 export interface QuestionResponse {
   answer: string;
-  context_used: ContextUsed;
 }

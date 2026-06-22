@@ -5,7 +5,7 @@ from google.genai import types
 from anthropic import AsyncAnthropic
 from pydantic import ValidationError
 from core.config import settings
-from models.schemas import ContextUsed, LLMResponse, QuestionResponse, SuggestionsResponse
+from models.schemas import LLMResponse, QuestionResponse, SuggestionsResponse
 from fastapi import HTTPException
 from services.data_service import data_service
 from core.prompts import AGENT_PROMPT, SUGGESTIONS_PROMPT
@@ -37,9 +37,7 @@ class LLMService:
         No queries have been executed yet. This is Turn 1 of {self.MAX_TURNS} at most.
     """
 
-        used_rows=set()
-        used_columns=set()
-        used_cells=set()
+    #TODO: save queries
 
         for turn in range(self.MAX_TURNS):
             try:
@@ -51,18 +49,9 @@ class LLMService:
             except Exception as e:
                 raise HTTPException(status_code=503, detail=f"LLM Error during turn {turn}: {str(e)}")
 
-            used_rows.update(llm_response.context_used.used_rows)
-            used_columns.update(llm_response.context_used.used_columns)
-            used_cells.update(llm_response.context_used.used_cells)
-
             if llm_response.did_finish:
                 return QuestionResponse(
                     answer=llm_response.response,
-                    context_used=ContextUsed(
-                        used_rows=list(used_rows),
-                        used_columns=list(used_columns),
-                        used_cells=list(used_cells),
-                    ),
                 )
 
             sql_execution_feedback = ""
@@ -100,15 +89,16 @@ class LLMService:
         """
         return QuestionResponse(
             answer="I reached the maximum number of queries without a final conclusion. Based on the data examined so far, I cannot provide a definitive answer. Please refine or narrow down your question.",
-            context_used=ContextUsed(
-                used_rows=list(used_rows),
-                used_columns=list(used_columns),
-                used_cells=list(used_cells),
-            ),
         )
 
     async def run_agent_step(self, prompt: str) -> LLMResponse:
         try:
+            logger.debug(
+                "=== LLM REQUEST (run_agent_step / Claude) ===\n"
+                "[SYSTEM INSTRUCTION]\n%s\n"
+                "[USER MESSAGE]\n%s",
+                AGENT_PROMPT, prompt,
+            )
             response = await self.anthropic_client.messages.create(
                 model="claude-sonnet-4-6",
                 system=AGENT_PROMPT,
@@ -124,7 +114,11 @@ class LLMService:
                     }
                 ],
             )
-            
+            logger.debug(
+                "=== LLM RESPONSE (run_agent_step / Claude) ===\n%s",
+                response.model_dump_json(indent=2),
+            )
+
             tool_call = next((block for block in response.content if block.type == 'tool_use'), None)
             if not tool_call:
                 raise HTTPException(status_code=500, detail="LLM did not return a valid tool call.")

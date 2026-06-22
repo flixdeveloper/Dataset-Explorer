@@ -11,8 +11,6 @@ interface DataTableProps {
   pageSize: number;
   loading: boolean;
   onPageChange: (page: number) => void;
-  highlightedRows?: number[];
-  highlightedColumns?: string[];
 }
 
 export default function DataTable({
@@ -23,8 +21,6 @@ export default function DataTable({
   pageSize,
   loading,
   onPageChange,
-  highlightedRows = [],
-  highlightedColumns = [],
 }: DataTableProps) {
   const {
     table,
@@ -52,8 +48,6 @@ export default function DataTable({
         table={table}
         isFiltering={isFiltering}
         globalFilter={deferredFilter}
-        highlightedRows={highlightedRows}
-        highlightedColumns={highlightedColumns}
       />
       <TablePagination
         page={page}

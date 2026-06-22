@@ -48,7 +48,6 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
           {
             role: 'assistant',
             content: action.payload.answer,
-            context_used: action.payload.context_used,
           },
         ],
       };
