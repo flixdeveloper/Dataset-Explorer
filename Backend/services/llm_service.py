@@ -19,10 +19,7 @@ class LLMService:
         self.anthropic_client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
 
     async def ask_question(self, question: str) -> QuestionResponse:
-        try:
-            context = data_service.get_llm_context()
-        except HTTPException as e:
-            raise e
+        context = data_service.get_llm_context()
 
         agent_memory = f"""
         <task>
@@ -35,16 +32,16 @@ class LLMService:
 
         <history>
         No queries have been executed yet. This is Turn 1 of {self.MAX_TURNS} at most.
-    """
+        """
 
-    #TODO: save queries
+        #TODO: save queries
 
         for turn in range(self.MAX_TURNS):
             try:
                 prompt = f"""
-                {agent_memory}
-                </history>
-                """
+                    {agent_memory}
+                    </history>
+                    """
                 llm_response = await self.run_agent_step(prompt)
             except Exception as e:
                 raise HTTPException(status_code=503, detail=f"LLM Error during turn {turn}: {str(e)}")
@@ -137,19 +134,16 @@ class LLMService:
             )
 
     async def generate_suggestions(self) -> SuggestionsResponse:
+        context = data_service.get_llm_context()
+        contents = f"<context>\n{context}\n</context>"
+        logger.debug(
+            "=== LLM REQUEST (generate_suggestions) ===\n"
+            "[SYSTEM INSTRUCTION]\n%s\n"
+            "[CONTENTS]\n%s",
+            SUGGESTIONS_PROMPT, contents
+        )
+        
         try:
-            context = data_service.get_llm_context()
-        except HTTPException as e:
-            raise e
-
-        try:
-            contents = f"<context>\n{context}\n</context>"
-            logger.debug(
-                "=== LLM REQUEST (generate_suggestions) ===\n"
-                "[SYSTEM INSTRUCTION]\n%s\n"
-                "[CONTENTS]\n%s",
-                SUGGESTIONS_PROMPT, contents
-            )
             response = await self.google_client.aio.models.generate_content(
                 model='gemini-2.5-flash-lite',
                 contents=contents,
