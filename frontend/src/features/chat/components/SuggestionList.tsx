@@ -7,11 +7,15 @@ interface SuggestionListProps {
 }
 
 export default function SuggestionList({ suggestions, loading, onSelect }: SuggestionListProps) {
+  const hasContent = loading || suggestions.length > 0;
+
   return (
     <>
-      <p className="text-xs text-gray-400 dark:text-gray-500 font-medium uppercase tracking-wider mb-3">
-        Suggestions
-      </p>
+      {hasContent && (
+        <p className="text-xs text-gray-400 dark:text-gray-500 font-medium uppercase tracking-wider mb-3">
+          Suggestions
+        </p>
+      )}
       <div className="flex flex-col gap-2">
         {loading
           ? Array.from({ length: 5 }).map((_, i) => (

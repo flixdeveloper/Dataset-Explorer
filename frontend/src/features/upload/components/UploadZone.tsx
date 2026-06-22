@@ -8,7 +8,22 @@ interface UploadZoneProps {
   isLoading?: boolean;
 }
 
+const SAMPLE_FILE = 'grades.csv';
+
 export default function UploadZone({ onUpload, onError, isLoading = false }: UploadZoneProps) {
+  const loadSample = useCallback(async () => {
+    if (isLoading) return;
+    try {
+      const res = await fetch(`/${SAMPLE_FILE}`);
+      if (!res.ok) throw new Error(`Could not load ${SAMPLE_FILE}`);
+      const blob = await res.blob();
+      const file = new File([blob], SAMPLE_FILE, { type: 'text/csv' });
+      onUpload(file);
+    } catch (err) {
+      onError?.(err instanceof Error ? err.message : 'Failed to load sample data');
+    }
+  }, [isLoading, onUpload, onError]);
+
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
@@ -66,14 +81,16 @@ export default function UploadZone({ onUpload, onError, isLoading = false }: Upl
       </div>
 
       <button
+        type="button"
+        onClick={loadSample}
         disabled={isLoading}
         className="w-full max-w-2xl flex items-center justify-between p-4 border border-gray-200 dark:border-gray-700 rounded-lg hover:border-gray-300 dark:hover:border-gray-600 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mb-16 disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <div className="flex items-center gap-3">
           <FileText className="w-5 h-5 text-gray-400 dark:text-gray-500" />
-          <span className="font-mono font-medium">sample_orders.csv</span>
+          <span className="font-mono font-medium">grades.csv</span>
         </div>
-        <div className="text-sm text-gray-400 dark:text-gray-500 font-mono">87 rows • 10 cols</div>
+        <div className="text-sm text-gray-400 dark:text-gray-500 font-mono">2315 rows • 13 cols</div>
       </button>
     </>
   );

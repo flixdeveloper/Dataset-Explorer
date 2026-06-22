@@ -18,7 +18,7 @@ export default function Home() {
       <div className="text-center mb-12">
         <h1 className="text-4xl font-bold mb-4 font-mono">CSV data explorer</h1>
         <p className="text-gray-500 dark:text-gray-400 max-w-lg mx-auto leading-relaxed">
-          Upload any CSV file. Browse paginated rows, detect column types, and ask an AI to analyze patterns in your data.
+          Upload any CSV file. Instantly explore your datasets, filter and search through rows, and ask an AI to analyze patterns in your data.
         </p>
       </div>
 
@@ -27,13 +27,13 @@ export default function Home() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-3xl">
         <FeatureCard
           icon={<LayoutGrid className="w-5 h-5 text-blue-500" />}
-          title="Paginated table"
-          description="50 rows per page, sticky header, horizontal scroll"
+          title="Seamless Exploration"
+          description="Glide through massive datasets effortlessly"
         />
         <FeatureCard
           icon={<Type className="w-5 h-5 text-indigo-500" />}
-          title="Type detection"
-          description="Numeric, text, and status columns auto-styled"
+          title="Smart Search"
+          description="Instantly search, filter and sort your data."
         />
         <FeatureCard
           icon={<Sparkles className="w-5 h-5 text-purple-500" />}
