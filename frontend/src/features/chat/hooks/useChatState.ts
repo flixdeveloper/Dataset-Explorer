@@ -63,7 +63,7 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
     case 'SUBMIT_END':
       return { ...state, isLoading: false };
     case 'SUGGESTIONS_LOADING':
-      return { ...state, loadingSuggestions: true };
+      return { ...state, loadingSuggestions: true, suggestions: [] };
     case 'SUGGESTIONS_SUCCESS':
       return { ...state, suggestions: action.payload, loadingSuggestions: false };
     case 'SUGGESTIONS_ERROR':

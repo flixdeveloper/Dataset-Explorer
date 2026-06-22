@@ -1,3 +1,5 @@
+import logging
+
 from google import genai
 from google.genai import types
 from anthropic import AsyncAnthropic
@@ -7,6 +9,8 @@ from models.schemas import ContextUsed, LLMResponse, QuestionResponse, Suggestio
 from fastapi import HTTPException
 from services.data_service import data_service
 from core.prompts import AGENT_PROMPT, SUGGESTIONS_PROMPT
+
+logger = logging.getLogger(__name__)
 
 class LLMService:
     def __init__(self):
@@ -106,7 +110,7 @@ class LLMService:
     async def run_agent_step(self, prompt: str) -> LLMResponse:
         try:
             response = await self.anthropic_client.messages.create(
-                model="claude-3-5-sonnet-20240620",
+                model="claude-sonnet-4-6",
                 system=AGENT_PROMPT,
                 max_tokens=4096,
                 temperature=0.1,
@@ -145,9 +149,16 @@ class LLMService:
             raise e
 
         try:
+            contents = f"<context>\n{context}\n</context>"
+            logger.debug(
+                "=== LLM REQUEST (generate_suggestions) ===\n"
+                "[SYSTEM INSTRUCTION]\n%s\n"
+                "[CONTENTS]\n%s",
+                SUGGESTIONS_PROMPT, contents
+            )
             response = await self.google_client.aio.models.generate_content(
                 model='gemini-2.5-flash-lite',
-                contents=f"<context>\n{context}\n</context>",
+                contents=contents,
                 config=types.GenerateContentConfig(
                     system_instruction=SUGGESTIONS_PROMPT,
                     response_mime_type="application/json",
