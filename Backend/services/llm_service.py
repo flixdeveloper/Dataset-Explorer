@@ -1,6 +1,6 @@
-import json
 from google import genai
 from google.genai import types
+from pydantic import ValidationError
 from core.config import settings
 from models.schemas import ContextUsed, LLMResponse, QuestionResponse, SuggestionsResponse
 from fastapi import HTTPException
@@ -116,14 +116,14 @@ class LLMService:
             )
             return LLMResponse.model_validate_json(response.text)
 
-        except json.JSONDecodeError:
+        except ValidationError:
             raise HTTPException(
-                status_code=500, 
+                status_code=500,
                 detail="LLM returned an invalid JSON string format."
             )
         except Exception as e:
             raise HTTPException(
-                status_code=503, 
+                status_code=503,
                 detail=f"Gemini API connection failure: {str(e)}"
             )
 
@@ -145,7 +145,7 @@ class LLMService:
                 ),
             )
             return SuggestionsResponse.model_validate_json(response.text)
-        except json.JSONDecodeError:
+        except ValidationError:
             raise HTTPException(status_code=500, detail="LLM returned an invalid JSON string format.")
         except Exception as e:
             raise HTTPException(status_code=503, detail=f"Gemini API connection failure: {str(e)}")
