@@ -2,7 +2,10 @@
 A full-stack web application for uploading CSV datasets, exploring their contents, and gaining natural-language AI insights.
 
 ## Screenshots
-[SCREENSHOTS]
+<img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_03_42" src="https://github.com/user-attachments/assets/cfb1538d-4592-4a28-af43-c2e981684945" />
+<img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_04_31" src="https://github.com/user-attachments/assets/4bacb920-b90b-4d98-86ee-4bbb492d0e18" />
+<img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_09_28" src="https://github.com/user-attachments/assets/fb4d13eb-454c-46be-8475-e0589c165a47" />
+
 
 ## Architecture Overview
 
@@ -23,11 +26,11 @@ flowchart LR
     DuckDB --> Mem
 ```
 
-**Backend layers**
+### Backend structure
 
 The Python-based FastAPI backend is structured with a strict separation of concerns, utilizing a thin API routing layer that relies on Pydantic schemas for request and response validation.
 
-**Frontend structure**
+### Frontend structure
 
 The React frontend is built with Vite and TypeScript, utilizing a feature-based architecture that cleanly isolates domain modules like dataset management, table rendering, and AI chat.
 
@@ -93,7 +96,7 @@ Open `http://localhost:5173` in your browser.
 <details>
 <summary>Initial Prompt</summary>
 
-'''
+```
 [SYSTEM INSTRUCTION]
 
     <role>
@@ -202,14 +205,14 @@ Columns:
         No queries have been executed yet. This is Turn 1 of 3 at most.
 
                     </history>
-'''
+```
 
 </details>
 
 <details>
 <summary>Initial Processing</summary>
 
-'''
+```
 [SYSTEM INSTRUCTION]
 
     <role>
@@ -334,17 +337,17 @@ Columns:
         </turn>
 
                     </history>
-'''
+```
 
 </details>
 
 <details>
 <summary>Final Answer</summary>
 
-'''
+```
 "response": "The average grade for **Assignment 2** is **66.85**, while the average grade for **Assignment 4** is **54.11**. The difference between the two is **12.74 points** (Assignment 2 − Assignment 4).\n\nThis suggests that Assignment 4 was notably harder — or less well-performed — than Assignment 2, with students scoring roughly 19% lower on average. A gap of ~12.7 points is quite substantial and may be worth investigating further (e.g., whether Assignment 4 had a different format, difficulty level, or grading rubric).",
         "did_finish": true
-'''
+```
 </details>
 
 ## What I'd Do Next
