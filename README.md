@@ -2,7 +2,10 @@
 A full-stack web application for uploading CSV datasets, exploring their contents, and gaining natural-language AI insights.
 
 ## Screenshots
-[SCREENSHOTS]
+<img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_03_42" src="https://github.com/user-attachments/assets/cfb1538d-4592-4a28-af43-c2e981684945" />
+<img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_04_31" src="https://github.com/user-attachments/assets/4bacb920-b90b-4d98-86ee-4bbb492d0e18" />
+<img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_09_28" src="https://github.com/user-attachments/assets/fb4d13eb-454c-46be-8475-e0589c165a47" />
+
 
 ## Architecture Overview
 
