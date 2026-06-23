@@ -23,11 +23,11 @@ flowchart LR
     DuckDB --> Mem
 ```
 
-**Backend layers**
+### Backend structure
 
 The Python-based FastAPI backend is structured with a strict separation of concerns, utilizing a thin API routing layer that relies on Pydantic schemas for request and response validation.
 
-**Frontend structure**
+### Frontend structure
 
 The React frontend is built with Vite and TypeScript, utilizing a feature-based architecture that cleanly isolates domain modules like dataset management, table rendering, and AI chat.
 
@@ -93,7 +93,7 @@ Open `http://localhost:5173` in your browser.
 <details>
 <summary>Initial Prompt</summary>
 
-'''
+```
 [SYSTEM INSTRUCTION]
 
     <role>
@@ -202,14 +202,14 @@ Columns:
         No queries have been executed yet. This is Turn 1 of 3 at most.
 
                     </history>
-'''
+```
 
 </details>
 
 <details>
 <summary>Initial Processing</summary>
 
-'''
+```
 [SYSTEM INSTRUCTION]
 
     <role>
@@ -334,17 +334,17 @@ Columns:
         </turn>
 
                     </history>
-'''
+```
 
 </details>
 
 <details>
 <summary>Final Answer</summary>
 
-'''
+```
 "response": "The average grade for **Assignment 2** is **66.85**, while the average grade for **Assignment 4** is **54.11**. The difference between the two is **12.74 points** (Assignment 2 − Assignment 4).\n\nThis suggests that Assignment 4 was notably harder — or less well-performed — than Assignment 2, with students scoring roughly 19% lower on average. A gap of ~12.7 points is quite substantial and may be worth investigating further (e.g., whether Assignment 4 had a different format, difficulty level, or grading rubric).",
         "did_finish": true
-'''
+```
 </details>
 
 ## What I'd Do Next
