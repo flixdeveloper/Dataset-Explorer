@@ -12,7 +12,7 @@ export default function DataView() {
   const navigate = useNavigate();
   const { table, isLoading } = useDatasetState();
   const { loadPage } = useDatasetActions();
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
   const columns = useMemo(
     () => (table ? table.columns.filter(c => c !== SYSTEM_COL) : []),
