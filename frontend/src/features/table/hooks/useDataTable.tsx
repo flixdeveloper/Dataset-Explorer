@@ -19,6 +19,12 @@ interface UseDataTableOptions {
   pageSize: number;
 }
 
+/**
+ * Wires TanStack Table for the current page of rows.
+ * Sorting and filtering run client-side on the loaded page only;
+ * pagination is server-driven (manualPagination). useDeferredValue
+ * defers filter application so typing in the search box stays responsive.
+ */
 export function useDataTable({ columns, rows, totalRows, page, pageSize }: UseDataTableOptions) {
   const totalPages = Math.ceil(totalRows / pageSize);
   const startRow   = (page - 1) * pageSize + 1;

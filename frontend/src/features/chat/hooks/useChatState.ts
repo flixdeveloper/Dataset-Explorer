@@ -29,6 +29,7 @@ const initialState: ChatState = {
   loadingSuggestions: false,
 };
 
+/** Pure reducer for chat UI: message list, input, loading flags, and suggestions. */
 function chatReducer(state: ChatState, action: ChatAction): ChatState {
   switch (action.type) {
     case 'SET_INPUT':
@@ -72,6 +73,11 @@ function chatReducer(state: ChatState, action: ChatAction): ChatState {
   }
 }
 
+/**
+ * Chat state for the sidebar: suggestions on dataset load, Q&A submit flow.
+ * Fetches suggestions once per filename; AbortController cancels in-flight
+ * requests when the dataset changes or the component unmounts.
+ */
 export function useChatState(datasetFilename: string | undefined) {
   const [state, dispatch] = useReducer(chatReducer, initialState);
 

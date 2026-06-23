@@ -19,6 +19,13 @@ class LLMService:
         self.anthropic_client = AsyncAnthropic(api_key=settings.ANTHROPIC_API_KEY)
 
     async def ask_question(self, question: str) -> QuestionResponse:
+        """
+        Run the multi-turn ReAct agent loop for a user question.
+
+        Each turn: Claude receives task + schema + query history, returns either
+        a final answer (did_finish=true) or SQL to execute. SQL results are
+        appended to agent_memory and fed into the next turn, up to MAX_TURNS.
+        """
         context = data_service.get_llm_context()
 
         agent_memory = f"""
@@ -89,6 +96,12 @@ class LLMService:
         )
 
     async def run_agent_step(self, prompt: str) -> LLMResponse:
+        """
+        Execute a single Claude turn with structured tool output.
+
+        Forces the model to respond according to the LLMResponse schema, 
+        then validates the tool input with Pydantic.
+        """
         try:
             logger.debug(
                 "=== LLM REQUEST (run_agent_step / Claude) ===\n"
@@ -134,6 +147,12 @@ class LLMService:
             )
 
     async def generate_suggestions(self) -> SuggestionsResponse:
+        """
+        Generate starter questions for the chat panel using Gemini.
+
+        Sends the dataset schema as context and enforces a SuggestionsResponse
+        JSON shape.
+        """
         context = data_service.get_llm_context()
         contents = f"<context>\n{context}\n</context>"
         logger.debug(

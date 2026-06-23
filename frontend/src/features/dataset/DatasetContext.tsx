@@ -45,6 +45,7 @@ export function DatasetProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
+  /** Upload CSV to backend, load page 1, then navigate to the data view. */
   const handleUpload = useCallback(
     async (file: File) => {
       setIsLoading(true);
