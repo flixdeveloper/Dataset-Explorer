@@ -1,6 +1,13 @@
 # Dataset Explorer
 A full-stack web application for uploading CSV datasets, exploring their contents, and gaining natural-language AI insights.
 
+
+## Deployment
+The application is fully deployed and accessible:
+* **Frontend URL:** https://dataset-explorer-eight.vercel.app/ (Deployed via Vercel)
+* **Backend API URL:** https://dataset-explorer-api.onrender.com/ (Deployed via Render)
+
+
 ## Screenshots
 <img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_03_42" src="https://github.com/user-attachments/assets/cfb1538d-4592-4a28-af43-c2e981684945" />
 <img width="2496" height="1664" alt="‪frontend - Google Chrome‬ 23_06_2026 17_04_31" src="https://github.com/user-attachments/assets/4bacb920-b90b-4d98-86ee-4bbb492d0e18" />
