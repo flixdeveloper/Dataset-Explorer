@@ -1,7 +1,7 @@
 import { useRef, useState } from 'react';
 import { Search, SlidersHorizontal, X } from 'lucide-react';
 
-import { useClickOutside } from '@/shared/hooks/useClickOutside';
+import { useClickOutside } from '../hooks/useClickOutside';
 import type { ColumnMeta } from '../types';
 
 interface TableToolbarProps {

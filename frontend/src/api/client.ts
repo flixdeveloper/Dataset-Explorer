@@ -1,4 +1,4 @@
-import type { DataResponse, UploadResponse, QuestionResponse } from '@/shared/types/api';
+import type { DataResponse, UploadResponse, QuestionResponse } from './types';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000';
 
