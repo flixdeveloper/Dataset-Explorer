@@ -2,7 +2,7 @@ import { toast } from 'sonner';
 import { LayoutGrid, Type, Sparkles } from 'lucide-react';
 
 import { UploadZone } from '@/features/upload';
-import FeatureCard from '@/shared/components/FeatureCard';
+import FeatureCard from './components/FeatureCard';
 import { useDatasetActions, useDatasetState } from '@/features/dataset';
 
 export default function Home() {

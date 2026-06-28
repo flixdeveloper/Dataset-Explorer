@@ -8,8 +8,8 @@ import {
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import { fetchRows, uploadCSV } from '@/shared/services/api';
-import type { DataResponse } from '@/shared/types/api';
+import { fetchRows, uploadCSV } from '@/api';
+import type { DataResponse } from '@/api';
 import { toRowObjects } from './utils';
 import {
   PAGE_SIZE,

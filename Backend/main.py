@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 from api.routes import router as api_router
 from core.config import settings
+from mcp_server import mcp
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -12,6 +13,9 @@ logging.basicConfig(
 )
 
 app = FastAPI()
+
+# Expose backend capabilities over MCP at /mcp
+app.mount("/mcp", mcp.streamable_http_app())
 
 app.add_middleware(
     CORSMiddleware,
